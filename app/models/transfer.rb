@@ -1,10 +1,10 @@
 class Transfer < ApplicationRecord
-  enum status: {
+  enum :status, {
     pending: 'pending',
     processing: 'processing',
     completed: 'completed',
     failed: 'failed'
-  }, _default: :pending
+  }
 
   validates :user_id, :amount_cents, :idempotency_key, :status, presence: true
   validates :amount_cents, numericality: { greater_than: 0 }
