@@ -7,6 +7,24 @@ class ProcessTransferResultService
   end
 
   def call
-    { success: true, duplicate: false, status: :failed }
+    transfer = Transfer.find(@transfer_id)
+    Transfer.transaction do
+      transfer.lock!
+
+      if transfer.completed? || transfer.failed?
+        return { success: true, duplicate: true, status: transfer.status.to_sym }
+      end
+
+      case @bank_status
+      when 'success'
+        transfer.update!(status: :completed)
+        { success: true, duplicate: false, status: :completed }
+      when 'error'
+        transfer.update!(status: :failed)
+        { success: true, duplicate: false, status: :failed }
+      else
+        raise UnknownStatusError, "Estado del banco desconocido: #{@bank_status}"
+      end
+    end
   end
 end
