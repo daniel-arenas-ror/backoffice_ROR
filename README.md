@@ -60,6 +60,12 @@ Proyecto de ejemplo para manejo de transferencias bancarias con idempotencia y p
 	bin/rails server
 	```
 
+9. **Correr pruebas automaticas**
+
+  ```sh
+  bundle exec rspec spec/models/transfer_spec.rb
+  ```
+
 ## Endpoints API
 
 ### 1. Crear transferencia
