@@ -16,6 +16,6 @@ class ProcessCoreBankTransferJob < ApplicationJob
       @transfer.update!(status: :processing)
     end
 
-    # TODO: call bank API
+    CallCoreBankService.new(transfer: @transfer).call
   end
 end

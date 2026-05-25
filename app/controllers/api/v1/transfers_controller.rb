@@ -6,7 +6,7 @@ module Api
       def create
         @transfer = Transfer.create!(transfers_params)
 
-        #TODO: Si se crea con éxito, encolamos el proceso asíncrono
+        ProcessCoreBankTransferJob.perform_later(@transfer.id)
 
         render json: @transfer, status: :accepted
 
