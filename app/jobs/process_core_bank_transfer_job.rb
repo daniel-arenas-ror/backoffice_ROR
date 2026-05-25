@@ -1,7 +1,7 @@
 class ProcessCoreBankTransferJob < ApplicationJob
   queue_as :default
 
-  retry_on StandardError, attempts: 3, wait: :exponentially_longer do |job, error|
+  retry_on StandardError, attempts: 3, wait: :polynomially_longer do |job, error|
     transfer = Transfer.find(job.arguments.first)
     transfer.update!(status: :failed)
     Rails.logger.error "--- [JOB CRÍTICO] Transferencia #{transfer.id} falló definitivamente tras 3 intentos. ---"
