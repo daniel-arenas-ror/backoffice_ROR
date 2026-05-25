@@ -2,23 +2,15 @@ module Api
   module V1
     class TransfersController < BaseController
       def create
-        t_params = transfers_params
-        @transfer = Transfer.create!(
-          user_id: t_params[:user_id],
-          amount_cents: t_params[:amount],
-          idempotency_key: t_params[:idempotency_key],
-          status: :pending
-        )
+        @transfer = Transfer.create!(transfers_params)
 
-        # Si se crea con éxito, encolamos el proceso asíncrono
-        ProcessCoreBankTransferJob.perform_later(@transfer.id)
+        #TODO: Si se crea con éxito, encolamos el proceso asíncrono
 
-        render json: @transfer, status: :accepted # 202 Accepted para procesos asíncronos
+        render json: @transfer, status: :accepted
 
       rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
-        # Si la llave ya existe, recuperamos el registro existente de forma segura
-        @transfer = Transfer.find_by!(idempotency_key: t_params[:idempotency_key])
-        render json: @transfer, status: :ok # 200 OK informando el estado actual
+        @transfer = Transfer.find_by!(idempotency_key: transfers_params[:idempotency_key])
+        render json: @transfer, status: :ok
       end
 
       private
