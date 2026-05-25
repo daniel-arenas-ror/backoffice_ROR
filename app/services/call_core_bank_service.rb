@@ -8,7 +8,7 @@ class CallCoreBankService
 
   def initialize(transfer:)
     @transfer = transfer
-    @core_bank_url = URI("http://127.0.0.1:8000")
+    @core_bank_url = URI("http://127.0.0.1:8000/process_transfer")
   end
 
   def call
