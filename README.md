@@ -63,7 +63,7 @@ Proyecto de ejemplo para manejo de transferencias bancarias con idempotencia y p
 9. **Correr pruebas automaticas**
 
   ```sh
-  bundle exec rspec spec/models/transfer_spec.rb
+  bundle exec rspec
   ```
 
 ## Endpoints API
